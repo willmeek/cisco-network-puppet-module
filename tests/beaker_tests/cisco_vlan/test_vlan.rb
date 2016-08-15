@@ -102,13 +102,19 @@ tests[:non_default_extended] = {
 # State cannot be modified for extended vlans on N5k and N6k platforms.
 tests[:non_default_extended][:manifest_props].delete(:state) if platform[/n(5|6)k/]
 
-def unsupported_properties(_tests, _id)
+tests[:vn_segment_unsupported] =
+  agent_probe(agent,
+              'puppet resource cisco_vlan 128 mapped_vni=128000',
+              'Hardware is not capable of supporting vn-segment-vlan-based feature')
+
+def unsupported_properties(tests, _id)
   unprops = []
 
-  unprops << :mapped_vni if platform[/n7k/]
+  unprops << :mapped_vni if platform[/n7k/] || tests[:vn_segment_unsupported]
 
   unprops << :fabric_control unless platform[/n7k/]
 
+  puts "UNPROPS: #{unprops}" unless unprops.empty?
   unprops
 end
 
