@@ -1031,18 +1031,21 @@ end
 # Use facter to return cisco operating system information
 def operating_system
   return @cisco_os unless @cisco_os.nil?
+  puts "MGW: caller[0] NOT USING CACHED VALUE"
   @cisco_os = on(agent, facter_cmd('os.name')).stdout.chomp
 end
 
 @os_family = nil
 def os_family
   return @os_family unless @os_family.nil?
+  puts "MGW: caller[0] NOT USING CACHED VALUE"
   @os_family = on(agent, facter_cmd('os.family')).stdout.chomp
 end
 
 @virtual = nil
 def virtual
   return @virtual unless @virtual.nil?
+  puts "MGW: caller[0] NOT USING CACHED VALUE"
   @virtual = on(agent, facter_cmd('virtual')).stdout.chomp
 end
 
@@ -1051,6 +1054,7 @@ end
 # Use facter to return cisco hardware type
 def platform
   return @cisco_hardware unless @cisco_hardware.nil?
+  puts "MGW: caller[0] NOT USING CACHED VALUE"
   pi = on(agent, facter_cmd('-p cisco.hardware.type')).stdout.chomp
   if pi.empty?
     logger.debug 'Unable to query Cisco hardware type using the ' \
@@ -1098,6 +1102,7 @@ end
 @cached_img = nil
 def image?(reset_cache=false)
   return @cached_img unless @cached_img.nil? || reset_cache
+  puts "MGW: caller[0] NOT USING CACHED VALUE"
   on(agent, facter_cmd('-p cisco.images.system_image'))
   @cached_img = stdout.nil? ? '' : stdout
 end
