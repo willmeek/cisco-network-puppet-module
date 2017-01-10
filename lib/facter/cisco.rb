@@ -9,16 +9,18 @@ Facter.add(:cisco) do
 
   setcode do
     hash = {}
-
     hash['images'] = {}
+    hash['hardware'] = {}
+
     begin
-      hash['images']['system_image'] = Platform.system_image
+      hash['hardware']['uptime'] = Platform.uptime
     rescue NameError
       # In more recent versions, Platform moved into the Cisco namespace.
       Platform = Cisco::Platform
       Feature = Cisco::Feature
-      hash['images']['system_image'] = Platform.system_image
+      hash['hardware']['uptime'] = Platform.uptime
     end
+    hash['images']['system_image'] = Platform.system_image
     hash['images']['packages'] = Platform.packages
 
     hash['hardware'] = {}
@@ -26,7 +28,6 @@ Facter.add(:cisco) do
     hash['hardware']['cpu'] = Platform.cpu
     hash['hardware']['memory'] = Platform.memory
     hash['hardware']['board'] = Platform.board
-    hash['hardware']['uptime'] = Platform.uptime
     hash['hardware']['last_reset'] = Platform.last_reset
     hash['hardware']['reset_reason'] = Platform.reset_reason
 
