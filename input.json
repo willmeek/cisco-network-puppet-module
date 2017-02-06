@@ -1,0 +1,14 @@
+{
+   "Name": "provider",
+   "Author" : "Sai Chintalapudi",
+   "Bool_Properties": [
+      "bprop1",
+      "bprop2",
+      "bprop3"
+   ],
+   "Non_Bool_Properties": [
+      "nbprop1",
+      "nbprop2",
+      "nbprop3"
+   ]
+}
