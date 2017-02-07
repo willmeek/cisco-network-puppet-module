@@ -4,8 +4,8 @@ puts 'creating demo manifest file'
 json = File.read('input.json')
 obj = JSON.parse(json)
 name = obj['Name']
-dir = Dir.pwd
-fname = dir + '/examples/cisco/demo_' + name + '.pp'
+dir = Dir.pwd + '/../'
+fname = dir + 'examples/cisco/demo_' + name + '.pp'
 file = File.open(fname, 'w')
 month = Date::MONTHNAMES[Date.today.month]
 year = Date.today.year.to_s
@@ -40,7 +40,7 @@ file.puts "  }
 }"
 file.close
 puts 'creating type file'
-fname = dir + '/lib/puppet/type/cisco_' + name + '.rb'
+fname = dir + 'lib/puppet/type/cisco_' + name + '.rb'
 file = File.open(fname, 'w')
 file.puts '# Manages the Cisco ' + cap + ' configuration resource.
 #
@@ -106,10 +106,10 @@ end
 file.puts 'end'
 file.close
 puts 'creating provider file'
-dir = Dir.pwd + '/lib/puppet/provider/cisco_' + name
+dir = Dir.pwd + '/../lib/puppet/provider/cisco_' + name
 Dir.mkdir(dir) unless File.exist?(dir)
-dir = Dir.pwd
-fname = dir + '/lib/puppet/provider/cisco_' + name + '/cisco.rb'
+dir = Dir.pwd + '/../'
+fname = dir + 'lib/puppet/provider/cisco_' + name + '/cisco.rb'
 file = File.open(fname, 'w')
 file.puts '# ' + month + ', ' + year + '
 #
@@ -226,10 +226,10 @@ file.puts "\n  def flush
 end"
 file.close
 puts 'creating beaker file'
-dir = Dir.pwd + '/tests/beaker_tests/cisco_' + name
+dir = Dir.pwd + '/../tests/beaker_tests/cisco_' + name
 Dir.mkdir(dir) unless File.exist?(dir)
-dir = Dir.pwd
-fname = dir + '/tests/beaker_tests/cisco_' + name + '/test_' + name + '.rb'
+dir = Dir.pwd + '/../'
+fname = dir + 'tests/beaker_tests/cisco_' + name + '/test_' + name + '.rb'
 file = File.open(fname, 'w')
 file.puts '###############################################################################
 # Copyright (c) ' + year + ' Cisco and/or its affiliates.
