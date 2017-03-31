@@ -185,6 +185,7 @@ Puppet::Type.type(:cisco_interface).provide(:cisco) do
       interface: interface_name,
       name:      interface_name,
       ensure:    :present,
+      obj:       nu_obj,
     }
     # Call node_utils getter for each property
     INTF_NON_BOOL_PROPS.each do |prop|
@@ -200,6 +201,16 @@ Puppet::Type.type(:cisco_interface).provide(:cisco) do
     end
     new(current_state)
   end # self.properties_get
+
+  def ensure_set(interface_name, nu_obj)
+    val = :present
+    return if nu_obj.nil?
+    if interface_name[/ethernet/]
+      in_default = nu_obj.send('default?')
+      val = :purged if in_default
+    end
+    val
+  end
 
   def self.instances
     interfaces = []
@@ -222,11 +233,21 @@ Puppet::Type.type(:cisco_interface).provide(:cisco) do
   end # self.prefetch
 
   def exists?
-    (@property_hash[:ensure] == :present)
+    lensure = ensure_set(@property_hash[:name], @property_hash[:obj])
+    if lensure != :purged
+      return (@property_hash[:ensure] == :present)
+    else
+      return false
+    end
   end
 
   def create
-    @property_flush[:ensure] = :present
+    lensure = ensure_set(@property_hash[:name], @property_hash[:obj])
+    if lensure != :purged
+      @property_flush[:ensure] = :present
+    else
+      @property_flush[:ensure] = :purged
+    end
   end
 
   def destroy
@@ -359,6 +380,8 @@ Puppet::Type.type(:cisco_interface).provide(:cisco) do
       if @nu.nil?
         new_interface = true
         @nu = Cisco::Interface.new(@resource[:interface])
+      elsif @property_flush[:ensure] == :purged
+        new_interface = true
       end
       properties_set(new_interface)
     end
