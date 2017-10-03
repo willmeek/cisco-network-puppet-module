@@ -21,16 +21,16 @@ Facter.add(:cisco) do
       hash['images']['system_image'] = Platform.system_image
       hash['images']['full_version'] = Platform.image_version
     end
-    hash['images']['packages'] = Platform.packages
 
     hash['hardware'] = {}
     hash['hardware']['type'] = Platform.hardware_type
     hash['hardware']['cpu'] = Platform.cpu
-    hash['hardware']['memory'] = Platform.memory
-    hash['hardware']['board'] = Platform.board
     hash['hardware']['uptime'] = Platform.uptime
+    hash['hardware']['board'] = Platform.board
     hash['hardware']['last_reset'] = Platform.last_reset
     hash['hardware']['reset_reason'] = Platform.reset_reason
+    hash['images']['packages'] = Platform.packages
+    hash['hardware']['memory'] = Platform.memory
 
     hash['inventory'] = {}
     hash['inventory']['chassis'] = Platform.chassis

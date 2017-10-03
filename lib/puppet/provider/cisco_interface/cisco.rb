@@ -188,15 +188,19 @@ Puppet::Type.type(:cisco_interface).provide(:cisco) do
       ensure:    :present,
     }
     # Call node_utils getter for each property
-    INTF_NON_BOOL_PROPS.each do |prop|
-      current_state[prop] = nu_obj.send(prop)
-    end
-    INTF_BOOL_PROPS.each do |prop|
-      val = nu_obj.send(prop)
-      if val.nil?
-        current_state[prop] = nil
-      else
-        current_state[prop] = val ? :true : :false
+    cache_grps = nu_obj.cache_prop_grps(INTF_ALL_PROPS)
+    cache_grps.each do |group|
+      group.each do |prop|
+        if INTF_BOOL_PROPS.include?(prop)
+          val = nu_obj.send(prop)
+          if val.nil?
+            current_state[prop] = nil
+          else
+            current_state[prop] = val ? :true : :false
+          end
+        else
+          current_state[prop] = nu_obj.send(prop)
+        end
       end
     end
     new(current_state)
