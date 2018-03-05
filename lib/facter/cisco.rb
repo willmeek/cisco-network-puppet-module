@@ -43,7 +43,8 @@ Facter.add(:cisco) do
       hash['inventory'][fan] = info
     end
 
-    hash['virtual_service'] = Platform.virtual_services
+    # mwiebe: The commands used for this fact hang via nxapi.
+    #hash['virtual_service'] = Platform.virtual_services
 
     hash['feature_compatible_module_iflist'] = {}
     interface_list = Feature.compatible_interfaces('fabricpath')
